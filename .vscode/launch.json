@@ -1,0 +1,11 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - DroolsTest",
+            "request": "launch",
+            "mainClass": "com.sample.App",
+            "projectName": "VirtualClothingStore"
+        }
+    ]
+}
