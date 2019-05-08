@@ -1,5 +1,8 @@
 package com.sample.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.sample.Constants.Gender;
 import com.sample.Constants.MaritalStatus;
 
@@ -8,12 +11,14 @@ public class Client {
     private Gender gender;
     private MaritalStatus maritalStatus;
     private boolean haveChildren;
+    private List<Item> cart;
 
     public Client(String name, Gender gender, MaritalStatus maritalStatus, boolean haveChildren) {
         this.name = name;
         this.gender = gender;
         this.maritalStatus = maritalStatus;
         this.haveChildren = haveChildren;
+        this.cart = new ArrayList<>();
     }
 
     /**
@@ -76,4 +81,27 @@ public class Client {
     public String toString() {
         return this.name;
     }
+
+    /**
+     * @return List<Item> return the cart
+     */
+    public List<Item> getCart() {
+        return cart;
+    }
+
+    /**
+     * @param cart the cart to set
+     */
+    public void setCart(List<Item> cart) {
+        this.cart = cart;
+    }
+
+    public boolean addToCart(Item item) {
+        return this.cart.add(item);
+    }
+
+    public boolean removeFromCart(Item item) {
+        return this.cart.remove(item);
+    }
+
 }

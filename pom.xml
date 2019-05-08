@@ -54,5 +54,10 @@
 			<artifactId>slf4j-simple</artifactId>
 			<version>1.7.26</version>
 		</dependency>
+		<dependency>
+			<groupId>com.intellij</groupId>
+			<artifactId>forms_rt</artifactId>
+			<version>6.0.5</version>
+		</dependency>
 	</dependencies>
 </project>

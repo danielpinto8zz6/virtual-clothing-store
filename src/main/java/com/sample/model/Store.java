@@ -10,6 +10,11 @@ public class Store {
         items = new ArrayList<>();
     }
 
+    public Store(List<Item> items) {
+        this.items = items;
+    }
+
+
     public void setItems(List<Item> items) {
         this.items = items;
     }
@@ -17,8 +22,12 @@ public class Store {
     public List<Item> getItems() {
         return this.items;
     }
-    
-    public void addItem(Item item) {
-        this.items.add(item);
+
+    public boolean addItem(Item item) {
+        return this.items.add(item);
+    }
+
+    public boolean removeItem(Item item) {
+        return this.items.remove(item);
     }
 }
