@@ -1,0 +1,99 @@
+package com.sample
+
+import com.sample.model.Client;
+import com.sample.Constants.Gender;
+import com.sample.Constants.MaritalStatus
+import javax.swing.JOptionPane
+import com.sample.model.Item
+import javax.swing.DefaultListModel;
+import java.util.List;
+import javax.swing.JList;
+import com.sample.model.Store
+
+global com.sample.model.Store STORE
+
+
+/**
+a) O cliente deseja comprar um certo item (correspondente ao seu sexo);
+
+b) Caso o cliente possua filhos, o sistema deve depois recomendar a compra de uma t-shirt de criança com
+o dizer “A minha mama é a melhor” ou o “O meu papa é o melhor”, dependendo do sexo do cliente
+(esta recomendação só deverá ser feita uma vez por compra, caso já tenha sido feita, deverá ser feita a
+recomendação da alínea c) ou d), consoante o cliente seja ou não casado);
+
+c) Caso o cliente não possua filhos, mas seja casado, o sistema deve recomendar um item com a mesma
+descrição ao escolhido, mas para o sexo oposto;
+
+d) Caso o cliente não possua filhos nem seja casado, o sistema deve recomendar o item “complementar”;
+
+e) Sempre que um item é adicionado, o sistema deve apresentar o valor corrente da compra.
+
+f) Ao terminar a compra, deve ser apresentada uma mensagem com a quantidade de itens comprados e o
+valor final.
+**/
+
+/**
+* Recommend an item, returns boolean, true if user accepts recommendation
+**/
+function boolean recommendItem(Item item) {
+    int dialogResult = JOptionPane.showConfirmDialog (null, item.toString(), "Would You Like to Accept suggestion?", JOptionPane.YES_NO_OPTION);
+
+    return (dialogResult == JOptionPane.YES_OPTION);
+}
+
+rule "Client is male and have children"
+    when
+        $client : Client(gender == Gender.MALE, haveChildren == true)
+        $store : Store()
+        $recommendation : Item ( name == "TSHIRT - A minha mama é a melhor", gender == Gender.FEMALE) from $store.getItems()
+    then
+        if (recommendItem($recommendation)) {
+            System.out.println($recommendation.toString());
+            // Buy here
+        }
+end
+
+rule "Client is female and have children"
+    when
+        $client : Client( gender == Gender.FEMALE, haveChildren == true )
+    then
+        if (recommendItem(new Item("Calças", Gender.MALE, 9.90))) {
+
+        }
+end
+
+rule "Client is male, married and doesn't have children"
+    when
+        $client : Client( gender == Gender.MALE, maritalStatus == MaritalStatus.MARRIED, haveChildren == false )
+    then
+        if (recommendItem(new Item("Calças", Gender.MALE, 9.90))) {
+
+        }
+end
+
+rule "Client is female, married and doesn't have children"
+    when
+        $client : Client( gender == Gender.FEMALE, maritalStatus == MaritalStatus.MARRIED, haveChildren == false )
+    then
+        if (recommendItem(new Item("Calças", Gender.MALE, 9.90))) {
+
+        }
+end
+
+rule "Client is male, single and doesn't have children"
+    when
+        $client : Client( gender == Gender.MALE, maritalStatus == MaritalStatus.SINGLE, haveChildren == false )
+    then
+        if (recommendItem(new Item("Calças", Gender.MALE, 9.90))) {
+
+        }
+end
+
+rule "Client is female, single and doesn't have children"
+    when
+        $client : Client( gender == Gender.FEMALE, maritalStatus == MaritalStatus.SINGLE, haveChildren == false )
+    then
+        if (recommendItem(new Item("Calças", Gender.MALE, 9.90))) {
+
+        }
+end

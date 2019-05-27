@@ -31,7 +31,7 @@ public class ItemInsertDialog extends JDialog {
 
     private void initializeUI() {
         setTitle("Insert Item");
-        setLocationRelativeTo(getParent());
+        setLocationByPlatform(true);
 
         setSize(new Dimension(500, 300));
         setContentPane(contentPane);

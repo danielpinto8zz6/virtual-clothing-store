@@ -33,7 +33,8 @@ public class SetupItemsDialog extends JDialog {
 
     private void initializeUI() {
         setTitle("Setup store items");
-        setLocationRelativeTo(getParent());
+        setLocationByPlatform(true);
+
         setContentPane(contentPane);
         setSize(new Dimension(500, 300));
         setModal(true);

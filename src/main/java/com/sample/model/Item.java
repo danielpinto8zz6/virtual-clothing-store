@@ -2,7 +2,10 @@ package com.sample.model;
 
 import com.sample.Constants.Gender;
 
-public class Item {
+import java.io.Serializable;
+import java.util.Objects;
+
+public class Item implements Serializable {
     private String name;
     private Gender gender;
     private double price;
@@ -58,5 +61,20 @@ public class Item {
     @Override
     public String toString() {
         return "Item: " + name + " Gender: " + gender + " Price: " + price;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Item)) return false;
+        Item item = (Item) o;
+        return Double.compare(item.price, price) == 0 &&
+                name.equals(item.name) &&
+                gender == item.gender;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, gender, price);
     }
 }

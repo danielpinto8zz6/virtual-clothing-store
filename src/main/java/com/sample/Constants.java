@@ -2,7 +2,7 @@ package com.sample;
 
 public class Constants {
     public enum Gender {
-        MALE("male"), FEMALE("female");
+        MALE("male"), FEMALE("female"), KID("kid");
 
         private final String gender;
 

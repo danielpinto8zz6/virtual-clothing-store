@@ -1,9 +1,10 @@
 package com.sample.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Store {
+public class Store implements Serializable {
     List<Item> items;
 
     public Store() {

@@ -28,7 +28,8 @@ public class ItemDetailsDialog extends JDialog {
 
     private void initializeUI() {
         setSize(new Dimension(300, 200));
-        setLocationRelativeTo(getParent());
+        setLocationByPlatform(true);
+
         setContentPane(contentPane);
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);

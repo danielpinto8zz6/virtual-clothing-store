@@ -1,0 +1,26 @@
+package com.sample
+
+import com.sample.model.Item;
+import com.sample.model.Store;
+import com.sample.model.Client;
+
+global javax.swing.JTextField QUANTITY
+global javax.swing.JTextField PURCHASE_VALUE
+global javax.swing.JList STORE_LIST
+global javax.swing.JList CART_LIST
+
+function void buyItem(Client client, javax.swing.JList listStore, javax.swing.JList listCart, Store store, Item item) {
+    client.addToCart(item);
+    store.removeItem(item);
+    listStore.setListData(store.getItems().toArray());
+    listCart.setListData(client.getCart().toArray());
+}
+
+
+rule "Client"
+when
+    $client : Client()
+then
+    STORE_LIST.resetKeyboardActions();
+    CART_LIST.resetKeyboardActions();
+end

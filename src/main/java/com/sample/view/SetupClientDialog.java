@@ -31,7 +31,7 @@ public class SetupClientDialog extends JDialog {
 
     private void initializeUI() {
         setTitle("Setup Client");
-        setLocationRelativeTo(getParent());
+        setLocationByPlatform(true);
         setSize(new Dimension(500, 300));
         setContentPane(contentPane);
         setModal(true);

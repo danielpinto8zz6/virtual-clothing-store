@@ -1,12 +1,13 @@
 package com.sample.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.sample.Constants.Gender;
 import com.sample.Constants.MaritalStatus;
 
-public class Client {
+public class Client implements Serializable {
     private String name;
     private Gender gender;
     private MaritalStatus maritalStatus;
