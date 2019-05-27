@@ -13,6 +13,7 @@ public class Client implements Serializable {
     private MaritalStatus maritalStatus;
     private boolean haveChildren;
     private List<Item> cart;
+    private List<Item> recommendations;
 
     public Client(String name, Gender gender, MaritalStatus maritalStatus, boolean haveChildren) {
         this.name = name;
@@ -20,6 +21,7 @@ public class Client implements Serializable {
         this.maritalStatus = maritalStatus;
         this.haveChildren = haveChildren;
         this.cart = new ArrayList<>();
+        this.recommendations = new ArrayList<>();
     }
 
     /**
@@ -105,4 +107,15 @@ public class Client implements Serializable {
         return this.cart.remove(item);
     }
 
+    public List<Item> getRecommendations() {
+        return recommendations;
+    }
+
+    public void setRecommendations(List<Item> recommendations) {
+        this.recommendations = recommendations;
+    }
+
+    public void addRecommendation(Item item) {
+        this.recommendations.add(item);
+    }
 }

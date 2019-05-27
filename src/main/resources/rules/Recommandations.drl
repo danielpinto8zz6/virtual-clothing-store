@@ -45,10 +45,12 @@ rule "Client is male and have children"
     when
         $client : Client(gender == Gender.MALE, haveChildren == true)
         $store : Store()
-        $recommendation : Item ( name == "TSHIRT - A minha mama é a melhor", gender == Gender.FEMALE) from $store.getItems()
+        $recommendation : Item ( name == "TSHIRT - O meu papa e o melhor", gender == Gender.KID ) from $store.getItems()
+        not Item ( name == "TSHIRT - A minha mama é a melhor", gender == Gender.FEMALE ) from $client.getRecommendations()
     then
+        $client.addRecommendation($recommendation);
+
         if (recommendItem($recommendation)) {
-            System.out.println($recommendation.toString());
             // Buy here
         }
 end
@@ -56,44 +58,55 @@ end
 rule "Client is female and have children"
     when
         $client : Client( gender == Gender.FEMALE, haveChildren == true )
+        $store : Store()
+        $recommendation : Item ( name == "TSHIRT - A minha mama e a melhor", gender == Gender.KID ) from $store.getItems()
+        not Item ( name == "TSHIRT - A minha mama é a melhor", gender == Gender.FEMALE ) from $client.getRecommendations()
     then
-        if (recommendItem(new Item("Calças", Gender.MALE, 9.90))) {
+        $client.addRecommendation($recommendation);
 
+        if (recommendItem($recommendation)) {
+            // Buy here
         }
 end
 
 rule "Client is male, married and doesn't have children"
     when
         $client : Client( gender == Gender.MALE, maritalStatus == MaritalStatus.MARRIED, haveChildren == false )
+        $store : Store()
+        $item : Item()
+        $recommendation : Item ( name == $item.name, gender == Gender.FEMALE) from $store.getItems()
     then
-        if (recommendItem(new Item("Calças", Gender.MALE, 9.90))) {
+        $client.addRecommendation($recommendation);
 
+        if (recommendItem($recommendation)) {
+            // Buy here
         }
 end
 
 rule "Client is female, married and doesn't have children"
     when
         $client : Client( gender == Gender.FEMALE, maritalStatus == MaritalStatus.MARRIED, haveChildren == false )
+        $store : Store()
+        $item : Item()
+        $recommendation : Item ( name == $item.name, gender == Gender.MALE) from $store.getItems()
     then
-        if (recommendItem(new Item("Calças", Gender.MALE, 9.90))) {
+        $client.addRecommendation($recommendation);
 
+        if (recommendItem($recommendation)) {
+            // Buy here
         }
 end
 
-rule "Client is male, single and doesn't have children"
+rule "Client is single and doesn't have children"
     when
-        $client : Client( gender == Gender.MALE, maritalStatus == MaritalStatus.SINGLE, haveChildren == false )
+        $client : Client( maritalStatus == MaritalStatus.SINGLE, haveChildren == false )
+        $store : Store()
+        $item : Item()
+        $recommendation : Item( $item.getComplementaryItem() ) from $store.getItems()
     then
-        if (recommendItem(new Item("Calças", Gender.MALE, 9.90))) {
+        $client.addRecommendation($recommendation);
 
-        }
-end
-
-rule "Client is female, single and doesn't have children"
-    when
-        $client : Client( gender == Gender.FEMALE, maritalStatus == MaritalStatus.SINGLE, haveChildren == false )
-    then
-        if (recommendItem(new Item("Calças", Gender.MALE, 9.90))) {
-
+        if (recommendItem($recommendation)) {
+            // Buy here
         }
 end

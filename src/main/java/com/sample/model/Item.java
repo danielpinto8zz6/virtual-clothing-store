@@ -9,6 +9,7 @@ public class Item implements Serializable {
     private String name;
     private Gender gender;
     private double price;
+    private Item complementaryItem;
 
     public Item(String name, Gender gender, double price) {
         this.name = name;
@@ -56,6 +57,14 @@ public class Item implements Serializable {
      */
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Item getComplementaryItem() {
+        return complementaryItem;
+    }
+
+    public void setComplementaryItem(Item complementaryItem) {
+        this.complementaryItem = complementaryItem;
     }
 
     @Override
