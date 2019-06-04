@@ -77,8 +77,7 @@ public class Item implements Serializable {
         if (this == o) return true;
         if (!(o instanceof Item)) return false;
         Item item = (Item) o;
-        return Double.compare(item.price, price) == 0 &&
-                name.equals(item.name) &&
+        return name.equals(item.name) &&
                 gender == item.gender;
     }
 

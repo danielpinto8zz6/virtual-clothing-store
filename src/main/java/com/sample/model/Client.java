@@ -1,6 +1,7 @@
 package com.sample.model;
 
 import java.io.Serializable;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -117,5 +118,21 @@ public class Client implements Serializable {
 
     public void addRecommendation(Item item) {
         this.recommendations.add(item);
+    }
+
+    public double getPurchaseValue() {
+        double total = 0.0;
+        for (Item item : cart) {
+            total += item.getPrice();
+        }
+
+        // Encut to 2 decimal places
+        total = ((double) ((int) (total * 100.0))) / 100.0;
+
+        return total;
+    }
+
+    public int getTotalCartItems() {
+        return cart.size();
     }
 }

@@ -42,34 +42,37 @@ function boolean recommendItem(Item item) {
 }
 
 rule "Client is male and have children"
+    salience 20
     when
         $client : Client(gender == Gender.MALE, haveChildren == true)
         $store : Store()
-        $recommendation : Item ( name == "TSHIRT - O meu papa e o melhor", gender == Gender.KID ) from $store.getItems()
-        not Item ( name == "TSHIRT - A minha mama é a melhor", gender == Gender.FEMALE ) from $client.getRecommendations()
+        $recommendation : Item ( name == "TSHIRT - O meu papa e o melhor" ) from $store.getItems()
+        not Item ( name == "TSHIRT - O meu papa e o melhor" ) from $client.getRecommendations()
     then
         $client.addRecommendation($recommendation);
 
         if (recommendItem($recommendation)) {
-            // Buy here
+            insert($recommendation);
         }
 end
 
 rule "Client is female and have children"
+    salience 30
     when
         $client : Client( gender == Gender.FEMALE, haveChildren == true )
         $store : Store()
-        $recommendation : Item ( name == "TSHIRT - A minha mama e a melhor", gender == Gender.KID ) from $store.getItems()
+        $recommendation : Item ( name == "TSHIRT - A minha mama e a melhor" ) from $store.getItems()
         not Item ( name == "TSHIRT - A minha mama é a melhor", gender == Gender.FEMALE ) from $client.getRecommendations()
     then
         $client.addRecommendation($recommendation);
 
         if (recommendItem($recommendation)) {
-            // Buy here
+            insert($recommendation);
         }
 end
 
 rule "Client is male, married and doesn't have children"
+    salience 40
     when
         $client : Client( gender == Gender.MALE, maritalStatus == MaritalStatus.MARRIED, haveChildren == false )
         $store : Store()
@@ -79,11 +82,12 @@ rule "Client is male, married and doesn't have children"
         $client.addRecommendation($recommendation);
 
         if (recommendItem($recommendation)) {
-            // Buy here
+            insert($recommendation);
         }
 end
 
 rule "Client is female, married and doesn't have children"
+    salience 50
     when
         $client : Client( gender == Gender.FEMALE, maritalStatus == MaritalStatus.MARRIED, haveChildren == false )
         $store : Store()
@@ -93,20 +97,20 @@ rule "Client is female, married and doesn't have children"
         $client.addRecommendation($recommendation);
 
         if (recommendItem($recommendation)) {
-            // Buy here
+            insert($recommendation);
         }
 end
 
 rule "Client is single and doesn't have children"
+    salience 60
     when
         $client : Client( maritalStatus == MaritalStatus.SINGLE, haveChildren == false )
         $store : Store()
         $item : Item()
-        $recommendation : Item( $item.getComplementaryItem() ) from $store.getItems()
     then
-        $client.addRecommendation($recommendation);
+        $client.addRecommendation($item.getComplementaryItem());
 
-        if (recommendItem($recommendation)) {
-            // Buy here
+        if (recommendItem($item.getComplementaryItem())) {
+            insert($item.getComplementaryItem());
         }
 end

@@ -32,9 +32,9 @@ public class ItemsLoader {
 	}
 
 	public static Item parseItem(String line) {
-		List<String> props = Arrays.asList(line.replaceAll("\\s+", "").split(","));
+		List<String> props = Arrays.asList(line.split(","));
 		if (props.size() == 3) {
-			String name = props.get(0);
+			String name = props.get(0).trim();
 			Gender gender = (props.get(1) == "male" || props.get(1) == "masculino") ? Gender.MALE : Gender.FEMALE;
 			double price = Double.parseDouble(props.get(2));
 

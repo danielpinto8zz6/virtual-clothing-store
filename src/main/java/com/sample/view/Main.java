@@ -53,10 +53,6 @@ public class Main extends JFrame {
             kSession.setGlobal("PURCHASE_VALUE", this.textFieldPurchaseValue);
             kSession.setGlobal("STORE_LIST", this.listItems);
             kSession.setGlobal("CART_LIST", this.listCart);
-            kSession.setGlobal("STORE", this.store);
-
-//            kSession.setGlobal("CLIENT", this.client);
-//            kSession.setGlobal("STORE", this.store);
         } catch (Exception e) {
             System.exit(0);
         }
@@ -72,6 +68,9 @@ public class Main extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setPreferredSize(new Dimension(750, 500));
         pack();
+
+        textFieldQuantity.setText("0");
+        textFieldPurchaseValue.setText("0");
 
         setLocationRelativeTo(null);
 
@@ -165,10 +164,10 @@ public class Main extends JFrame {
 //        listItems.setListData(store.getItems().toArray());
 //        listCart.setListData(client.getCart().toArray());
 
-                kSession.insert(selected);
-                kSession.insert(client);
-                kSession.insert(store);
-                kSession.fireAllRules();
+        kSession.insert(selected);
+        kSession.insert(client);
+        kSession.insert(store);
+        kSession.fireAllRules();
     }
 
     {

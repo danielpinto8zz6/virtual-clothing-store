@@ -16,11 +16,14 @@ function void buyItem(Client client, javax.swing.JList listStore, javax.swing.JL
     listCart.setListData(client.getCart().toArray());
 }
 
-
-rule "Client"
+rule "Buy Item"
+    salience 10
 when
     $client : Client()
+    $item : Item()
+    $store : Store()
 then
-    STORE_LIST.resetKeyboardActions();
-    CART_LIST.resetKeyboardActions();
+    buyItem($client, STORE_LIST, CART_LIST, $store, $item);
+    PURCHASE_VALUE.setText("" + $client.getPurchaseValue());
+    QUANTITY.setText("" + $client.getTotalCartItems());
 end
