@@ -100,6 +100,7 @@ public class SetupItemsDialog extends JDialog {
     }
 
     private void onOK() {
+        setupComplementaryItems();
         setVisible(false);
         dispose();
     }
@@ -113,6 +114,17 @@ public class SetupItemsDialog extends JDialog {
     public List<Item> showDialog() {
         setVisible(true);
         return items;
+    }
+
+    private void setupComplementaryItems() {
+        Item prevItem = null;
+        for (Item item : items) {
+            if (prevItem != null && prevItem.getComplementaryItem() == null) {
+                prevItem.setComplementaryItem(item);
+                item.setComplementaryItem(prevItem);
+            }
+            prevItem = item;
+        }
     }
 
     {

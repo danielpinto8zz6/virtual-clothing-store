@@ -42,7 +42,7 @@ function boolean recommendItem(Item item) {
 }
 
 rule "Client is male and have children"
-    salience 20
+    salience 90
     when
         $client : Client(gender == Gender.MALE, haveChildren == true)
         $store : Store()
@@ -57,7 +57,7 @@ rule "Client is male and have children"
 end
 
 rule "Client is female and have children"
-    salience 30
+    salience 80
     when
         $client : Client( gender == Gender.FEMALE, haveChildren == true )
         $store : Store()
@@ -72,7 +72,7 @@ rule "Client is female and have children"
 end
 
 rule "Client is male, married and doesn't have children"
-    salience 40
+    salience 70
     when
         $client : Client( gender == Gender.MALE, maritalStatus == MaritalStatus.MARRIED, haveChildren == false )
         $store : Store()
@@ -87,7 +87,7 @@ rule "Client is male, married and doesn't have children"
 end
 
 rule "Client is female, married and doesn't have children"
-    salience 50
+    salience 60
     when
         $client : Client( gender == Gender.FEMALE, maritalStatus == MaritalStatus.MARRIED, haveChildren == false )
         $store : Store()
@@ -102,11 +102,11 @@ rule "Client is female, married and doesn't have children"
 end
 
 rule "Client is single and doesn't have children"
-    salience 60
+    salience 50
     when
         $client : Client( maritalStatus == MaritalStatus.SINGLE, haveChildren == false )
         $store : Store()
-        $item : Item()
+        $item : Item( complementaryItem != null )
     then
         $client.addRecommendation($item.getComplementaryItem());
 

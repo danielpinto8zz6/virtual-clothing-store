@@ -17,6 +17,7 @@ public class ItemDetailsDialog extends JDialog {
     private JTextField textFieldName;
     private JTextField textFieldGender;
     private JTextField textFieldPrice;
+    private JTextField textFieldComplementaryItem;
 
     public ItemDetailsDialog(Frame parent, Item item) {
         this.initializeUI();
@@ -24,6 +25,9 @@ public class ItemDetailsDialog extends JDialog {
         textFieldName.setText(item.getName());
         textFieldGender.setText(item.getGender().toString());
         textFieldPrice.setText(String.valueOf(item.getPrice()));
+
+        if (item.getComplementaryItem() != null)
+            textFieldComplementaryItem.setText(item.getComplementaryItem().getName());
     }
 
     private void initializeUI() {
@@ -85,20 +89,20 @@ public class ItemDetailsDialog extends JDialog {
         buttonOK.setText("OK");
         panel2.add(buttonOK, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JPanel panel3 = new JPanel();
-        panel3.setLayout(new GridLayoutManager(3, 2, new Insets(0, 0, 0, 0), -1, -1));
+        panel3.setLayout(new GridLayoutManager(4, 2, new Insets(0, 0, 0, 0), -1, -1));
         contentPane.add(panel3, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         textFieldName = new JTextField();
-        textFieldName.setBackground(new Color(-18));
+        textFieldName.setBackground(new Color(-1));
         textFieldName.setEditable(false);
         textFieldName.setEnabled(true);
         panel3.add(textFieldName, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
         textFieldGender = new JTextField();
-        textFieldGender.setBackground(new Color(-18));
+        textFieldGender.setBackground(new Color(-1));
         textFieldGender.setEditable(false);
         textFieldGender.setEnabled(true);
         panel3.add(textFieldGender, new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
         textFieldPrice = new JTextField();
-        textFieldPrice.setBackground(new Color(-18));
+        textFieldPrice.setBackground(new Color(-1));
         textFieldPrice.setEditable(false);
         textFieldPrice.setEnabled(true);
         panel3.add(textFieldPrice, new GridConstraints(2, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
@@ -111,6 +115,13 @@ public class ItemDetailsDialog extends JDialog {
         final JLabel label3 = new JLabel();
         label3.setText("Price");
         panel3.add(label3, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final JLabel label4 = new JLabel();
+        label4.setText("Complementary Item");
+        panel3.add(label4, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        textFieldComplementaryItem = new JTextField();
+        textFieldComplementaryItem.setBackground(new Color(-1));
+        textFieldComplementaryItem.setEditable(false);
+        panel3.add(textFieldComplementaryItem, new GridConstraints(3, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
     }
 
     /**

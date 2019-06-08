@@ -10,6 +10,9 @@ global javax.swing.JList STORE_LIST
 global javax.swing.JList CART_LIST
 
 function void buyItem(Client client, javax.swing.JList listStore, javax.swing.JList listCart, Store store, Item item) {
+    Item complementaryItem = item.getComplementaryItem();
+    if (complementaryItem != null)
+        complementaryItem.setComplementaryItem(null);
     client.addToCart(item);
     store.removeItem(item);
     listStore.setListData(store.getItems().toArray());
@@ -17,7 +20,7 @@ function void buyItem(Client client, javax.swing.JList listStore, javax.swing.JL
 }
 
 rule "Buy Item"
-    salience 10
+    salience 100
 when
     $client : Client()
     $item : Item()

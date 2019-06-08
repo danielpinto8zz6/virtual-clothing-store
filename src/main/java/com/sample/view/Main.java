@@ -61,6 +61,8 @@ public class Main extends JFrame {
     }
 
     private void onFinalizePurchase() {
+        JDialog dialog = new ResultsDialog(client.getTotalCartItems(), client.getPurchaseValue());
+        dialog.setVisible(true);
     }
 
     private void initializeUI() {
@@ -207,12 +209,12 @@ public class Main extends JFrame {
         label2.setText("Purchase value");
         panel3.add(label2, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         textFieldQuantity = new JTextField();
-        textFieldQuantity.setBackground(new Color(-18));
+        textFieldQuantity.setBackground(new Color(-1));
         textFieldQuantity.setEditable(false);
         textFieldQuantity.setEnabled(true);
         panel3.add(textFieldQuantity, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
         textFieldPurchaseValue = new JTextField();
-        textFieldPurchaseValue.setBackground(new Color(-18));
+        textFieldPurchaseValue.setBackground(new Color(-1));
         textFieldPurchaseValue.setEditable(false);
         textFieldPurchaseValue.setEnabled(true);
         panel3.add(textFieldPurchaseValue, new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
