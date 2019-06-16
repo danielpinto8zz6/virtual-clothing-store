@@ -10,6 +10,7 @@ public class Item implements Serializable {
     private Gender gender;
     private double price;
     private Item complementaryItem;
+    private boolean isRecommendation = false;
 
     public Item(String name, Gender gender, double price) {
         this.name = name;
@@ -83,6 +84,14 @@ public class Item implements Serializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, gender, price);
+        return Objects.hash(name, gender);
+    }
+
+    public boolean isRecommendation() {
+        return isRecommendation;
+    }
+
+    public void setRecommendation(boolean recommendation) {
+        isRecommendation = recommendation;
     }
 }

@@ -20,7 +20,7 @@ public class SetupClientDialog extends JDialog {
     private JTextField textFieldName;
     private JComboBox comboBoxGender;
     private JComboBox comboBoxMaritalStatus;
-    private JCheckBox checkBoxHaveChildren;
+    private JCheckBox checkBoxHasChildren;
     private Client client = null;
 
     public SetupClientDialog(Frame parent) {
@@ -57,14 +57,14 @@ public class SetupClientDialog extends JDialog {
         String name = textFieldName.getText().trim();
         Gender gender = comboBoxGender.getSelectedItem() == "male" ? Gender.MALE : Gender.FEMALE;
         MaritalStatus status = comboBoxMaritalStatus.getSelectedItem() == "single" ? MaritalStatus.SINGLE : MaritalStatus.MARRIED;
-        boolean haveChildren = checkBoxHaveChildren.isSelected();
+        boolean hasChildren = checkBoxHasChildren.isSelected();
 
         if (name.isEmpty() || name == null) {
             JOptionPane.showMessageDialog(this, "Please insert a valid name.");
             return;
         }
 
-        client = new Client(name, gender, status, haveChildren);
+        client = new Client(name, gender, status, hasChildren);
 
         setVisible(false);
         dispose();
@@ -126,9 +126,9 @@ public class SetupClientDialog extends JDialog {
         defaultComboBoxModel2.addElement("single");
         comboBoxMaritalStatus.setModel(defaultComboBoxModel2);
         panel3.add(comboBoxMaritalStatus, new GridConstraints(2, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        checkBoxHaveChildren = new JCheckBox();
-        checkBoxHaveChildren.setText("");
-        panel3.add(checkBoxHaveChildren, new GridConstraints(3, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        checkBoxHasChildren = new JCheckBox();
+        checkBoxHasChildren.setText("");
+        panel3.add(checkBoxHasChildren, new GridConstraints(3, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JLabel label1 = new JLabel();
         label1.setText("Name");
         panel3.add(label1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
@@ -139,7 +139,7 @@ public class SetupClientDialog extends JDialog {
         label3.setText("Marital status");
         panel3.add(label3, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JLabel label4 = new JLabel();
-        label4.setText("Have children");
+        label4.setText("Has children");
         panel3.add(label4, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         textFieldName = new JTextField();
         panel3.add(textFieldName, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));

@@ -35,7 +35,8 @@ public class ItemsLoader {
 		List<String> props = Arrays.asList(line.split(","));
 		if (props.size() == 3) {
 			String name = props.get(0).trim();
-			Gender gender = (props.get(1) == "male" || props.get(1) == "masculino") ? Gender.MALE : Gender.FEMALE;
+			String genderStr = props.get(1).trim().toLowerCase();
+			Gender gender = (genderStr.equals("male")) ? Gender.MALE : Gender.FEMALE;
 			double price = Double.parseDouble(props.get(2));
 
 			return new Item(name, gender, price);

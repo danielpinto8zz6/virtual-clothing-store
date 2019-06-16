@@ -2,7 +2,6 @@ package com.sample;
 
 import com.sample.model.Client;
 import com.sample.model.Item;
-import com.sample.utils.DialogUtils;
 import com.sample.view.Main;
 import com.sample.view.SetupClientDialog;
 import com.sample.view.SetupItemsDialog;

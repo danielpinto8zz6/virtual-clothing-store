@@ -1,7 +1,6 @@
 package com.sample.model;
 
 import java.io.Serializable;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,31 +11,31 @@ public class Client implements Serializable {
     private String name;
     private Gender gender;
     private MaritalStatus maritalStatus;
-    private boolean haveChildren;
+    private boolean hasChildren;
     private List<Item> cart;
     private List<Item> recommendations;
 
-    public Client(String name, Gender gender, MaritalStatus maritalStatus, boolean haveChildren) {
+    public Client(String name, Gender gender, MaritalStatus maritalStatus, boolean hasChildren) {
         this.name = name;
         this.gender = gender;
         this.maritalStatus = maritalStatus;
-        this.haveChildren = haveChildren;
+        this.hasChildren = hasChildren;
         this.cart = new ArrayList<>();
         this.recommendations = new ArrayList<>();
     }
 
     /**
-     * @return the haveChildren
+     * @return the hasChildren
      */
-    public boolean isHaveChildren() {
-        return haveChildren;
+    public boolean isHasChildren() {
+        return hasChildren;
     }
 
     /**
-     * @param haveChildren the haveChildren to set
+     * @param hasChildren the hasChildren to set
      */
-    public void setHaveChildren(boolean haveChildren) {
-        this.haveChildren = haveChildren;
+    public void setHasChildren(boolean hasChildren) {
+        this.hasChildren = hasChildren;
     }
 
     /**

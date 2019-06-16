@@ -9,24 +9,22 @@ global javax.swing.JTextField PURCHASE_VALUE
 global javax.swing.JList STORE_LIST
 global javax.swing.JList CART_LIST
 
-function void buyItem(Client client, javax.swing.JList listStore, javax.swing.JList listCart, Store store, Item item) {
-    Item complementaryItem = item.getComplementaryItem();
-    if (complementaryItem != null)
-        complementaryItem.setComplementaryItem(null);
-    client.addToCart(item);
-    store.removeItem(item);
-    listStore.setListData(store.getItems().toArray());
-    listCart.setListData(client.getCart().toArray());
-}
-
 rule "Buy Item"
+no-loop true
     salience 100
 when
     $client : Client()
     $item : Item()
     $store : Store()
 then
-    buyItem($client, STORE_LIST, CART_LIST, $store, $item);
+    $client.addToCart($item);
+    $store.removeItem($item);
+    STORE_LIST.setListData($store.getItems().toArray());
+    CART_LIST.setListData($client.getCart().toArray());
     PURCHASE_VALUE.setText("" + $client.getPurchaseValue());
     QUANTITY.setText("" + $client.getTotalCartItems());
+    System.out.println($item.getName() + " added to cart!");
+    System.out.println("Purchase value : " + $client.getPurchaseValue() + " Total items : " + $client.getTotalCartItems());
+    update($client)
+    update($store)
 end

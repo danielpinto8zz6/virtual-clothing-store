@@ -53,6 +53,7 @@ public class ResultsDialog extends JDialog {
     private void onOK() {
         // add your code here
         dispose();
+        System.exit(0);
     }
 
     private void onCancel() {
