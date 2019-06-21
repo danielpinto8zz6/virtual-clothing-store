@@ -52,7 +52,7 @@ rule "Client is male and has children"
         $client.addRecommendation($recommendation);
         if (recommendItem($recommendation)) {
             $recommendation.setRecommendation(true);
-            insertLogical($recommendation);
+            insert($recommendation);
         }
 
         retract($item)
@@ -73,7 +73,7 @@ rule "Client is female and has children"
         $client.addRecommendation($recommendation);
         if (recommendItem($recommendation)) {
             $recommendation.setRecommendation(true);
-            insertLogical($recommendation);
+            insert($recommendation);
         }
 
         retract($item)
@@ -88,13 +88,12 @@ rule "Client is male, married and doesn't has children"
         $store : Store()
         $item : Item( !isRecommendation() )
         $recommendation : Item ( name == $item.name, gender == Gender.FEMALE ) from $store.getItems()
-        not Item ( name == $item.name, gender == Gender.FEMALE ) from $client.getRecommendations()
     then
         System.out.println("Rule 3");
         $client.addRecommendation($recommendation);
         if (recommendItem($recommendation)) {
             $recommendation.setRecommendation(true);
-            insertLogical($recommendation);
+            insert($recommendation);
         }
 
         retract($item)
@@ -109,13 +108,52 @@ rule "Client is female, married and doesn't has children"
         $store : Store()
         $item : Item( !isRecommendation() )
         $recommendation : Item ( name == $item.name, gender == Gender.MALE ) from $store.getItems()
-        not Item ( name == $item.name, gender == Gender.MALE ) from $client.getRecommendations()
     then
         System.out.println("Rule 4");
         $client.addRecommendation($recommendation);
         if (recommendItem($recommendation)) {
             $recommendation.setRecommendation(true);
-            insertLogical($recommendation);
+            insert($recommendation);
+        }
+
+        retract($item)
+        update($client)
+end
+
+rule "Client is male, married and has children"
+    no-loop true
+    salience 50
+    when
+        $client : Client( gender == Gender.MALE, maritalStatus == MaritalStatus.MARRIED, hasChildren == true )
+        $store : Store()
+        $item : Item( !isRecommendation() )
+        $recommendation : Item ( name == $item.name, gender == Gender.FEMALE ) from $store.getItems()
+    then
+        System.out.println("Rule 5");
+        $client.addRecommendation($recommendation);
+        if (recommendItem($recommendation)) {
+            $recommendation.setRecommendation(true);
+            insert($recommendation);
+        }
+
+        retract($item)
+        update($client)
+end
+
+rule "Client is female, married and has children"
+    no-loop true
+    salience 40
+    when
+        $client : Client( gender == Gender.FEMALE, maritalStatus == MaritalStatus.MARRIED, hasChildren == true )
+        $store : Store()
+        $item : Item( !isRecommendation() )
+        $recommendation : Item ( name == $item.name, gender == Gender.MALE ) from $store.getItems()
+    then
+        System.out.println("Rule 6");
+        $client.addRecommendation($recommendation);
+        if (recommendItem($recommendation)) {
+            $recommendation.setRecommendation(true);
+            insert($recommendation);
         }
 
         retract($item)
@@ -124,19 +162,38 @@ end
 
 rule "Client is single and doesn't has children"
     no-loop true
-    salience 50
+    salience 30
     when
         $client : Client( maritalStatus == MaritalStatus.SINGLE, hasChildren == false )
         $store : Store()
         $item : Item( complementaryItem != null, !isRecommendation() )
-        not Item ( name == $item.getComplementaryItem().getName(), gender == $item.getComplementaryItem().getGender() ) from $client.getRecommendations()
     then
-        System.out.println("Rule 5");
+        System.out.println("Rule 7");
         $client.addRecommendation($item.getComplementaryItem());
 
         if (recommendItem($item.getComplementaryItem())) {
             $item.getComplementaryItem().setRecommendation(true);
-            insertLogical($item.getComplementaryItem());
+            insert($item.getComplementaryItem());
+        }
+
+        retract($item)
+        update($client)
+end
+
+rule "Client is single and has children"
+    no-loop true
+    salience 20
+    when
+        $client : Client( maritalStatus == MaritalStatus.SINGLE, hasChildren == true )
+        $store : Store()
+        $item : Item( complementaryItem != null, !isRecommendation() )
+    then
+        System.out.println("Rule 8");
+        $client.addRecommendation($item.getComplementaryItem());
+
+        if (recommendItem($item.getComplementaryItem())) {
+            $item.getComplementaryItem().setRecommendation(true);
+            insert($item.getComplementaryItem());
         }
 
         retract($item)
@@ -145,7 +202,7 @@ end
 
 rule "Remove item"
     no-loop true
-    salience 40
+    salience 10
 	when
 		$item : Item();
 	then

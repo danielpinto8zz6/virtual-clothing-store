@@ -4,18 +4,30 @@ import com.sample.Constants.Gender;
 
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.UUID;
 
-public class Item implements Serializable {
+public class Item implements Serializable, Comparable<Item> {
+    private String id;
     private String name;
     private Gender gender;
     private double price;
     private Item complementaryItem;
     private boolean isRecommendation = false;
 
+    public Item() {
+        this.id = UUID.randomUUID().toString();
+    }
+
     public Item(String name, Gender gender, double price) {
+        this.id = UUID.randomUUID().toString();
         this.name = name;
         this.gender = gender;
         this.price = price;
+    }
+
+    public Item(String name, Gender gender, double price, Item complementary) {
+        this(name, gender, price);
+        this.complementaryItem = complementary;
     }
 
     /**
@@ -70,16 +82,17 @@ public class Item implements Serializable {
 
     @Override
     public String toString() {
-        return "Item: " + name + " Gender: " + gender + " Price: " + price;
+        return name + " (" + gender + ") - " + price + "$";
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Item)) return false;
+        if (this == o)
+            return true;
+        if (!(o instanceof Item))
+            return false;
         Item item = (Item) o;
-        return name.equals(item.name) &&
-                gender == item.gender;
+        return name.equals(item.name) && gender == item.gender;
     }
 
     @Override
@@ -93,5 +106,20 @@ public class Item implements Serializable {
 
     public void setRecommendation(boolean recommendation) {
         isRecommendation = recommendation;
+    }
+
+    @Override
+    public int compareTo(Item item) {
+        int comp = this.getName().compareTo(item.getName());
+
+        if (comp != 0) {
+            return comp;
+        }
+
+        return this.getGender().compareTo(item.getGender());
+    }
+
+    public String getId() {
+        return id;
     }
 }

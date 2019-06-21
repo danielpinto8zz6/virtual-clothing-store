@@ -4,26 +4,27 @@ import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
 import com.sample.model.Item;
+import com.sample.model.ItemsModel;
 import com.sample.utils.ItemsLoader;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class SetupItemsDialog extends JDialog {
     private JPanel contentPane;
     private JButton buttonOK;
     private JButton buttonCancel;
-    private JList listItems;
     private JButton buttonLoadFromFile;
     private JButton insertItemButton;
+    private JTable tableItems;
     private List<Item> items;
+    private ItemsModel storeModel;
 
     public SetupItemsDialog(Frame parent) {
         super(parent);
@@ -53,19 +54,33 @@ public class SetupItemsDialog extends JDialog {
         });
 
         // call onCancel() on ESCAPE
-        contentPane.registerKeyboardAction(e -> onCancel(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+        contentPane.registerKeyboardAction(e -> onCancel(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
+                JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
 
         items = new ArrayList<>();
         buttonLoadFromFile.addActionListener(actionEvent -> onLoadFromFile());
         insertItemButton.addActionListener(actionEvent -> onInsertItem());
+
+        storeModel = new ItemsModel(items);
+        tableItems.setModel(storeModel);
+        tableItems.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        tableItems.addMouseListener(new MouseAdapter() {
+            public void mousePressed(MouseEvent mouseEvent) {
+                if (mouseEvent.getClickCount() == 2 && tableItems.getSelectedRow() != -1) {
+                    Item selected = (Item) storeModel.getValueAt(tableItems.getSelectedRow(), -1);
+                    new ItemInsertDialog((Frame) getParent(), items, selected).showDialog();
+                    storeModel.fireTableRowsUpdated(tableItems.getSelectedRow(), tableItems.getSelectedRow());
+                }
+            }
+        });
     }
 
     private void onInsertItem() {
-        ItemInsertDialog dialog = new ItemInsertDialog((Frame) getParent());
+        ItemInsertDialog dialog = new ItemInsertDialog((Frame) getParent(), this.items);
         Item item = dialog.showDialog();
         if (item != null) {
-            items.add(item);
-            setItems();
+            storeModel.add(item);
         }
     }
 
@@ -78,8 +93,9 @@ public class SetupItemsDialog extends JDialog {
             if (ItemsLoader.fromFile(file) == null) {
                 JOptionPane.showMessageDialog(this, "File is not compatible.");
             } else {
-                items.addAll(ItemsLoader.fromFile(file));
-                setItems();
+                List<Item> loadedItems = ItemsLoader.fromFile(file);
+                setupComplementaryItems(loadedItems);
+                storeModel.addAll(loadedItems);
             }
         }
     }
@@ -91,16 +107,9 @@ public class SetupItemsDialog extends JDialog {
         return fileChooser;
     }
 
-    public void setItems() {
-        DefaultListModel<Item> listModel = new DefaultListModel<>();
-        for (Item item : items) {
-            listModel.addElement(item);
-        }
-        listItems.setModel(listModel);
-    }
-
     private void onOK() {
-        setupComplementaryItems();
+        // setupComplementaryItems();
+        items = items.stream().sorted().collect(Collectors.toList());
         setVisible(false);
         dispose();
     }
@@ -116,7 +125,7 @@ public class SetupItemsDialog extends JDialog {
         return items;
     }
 
-    private void setupComplementaryItems() {
+    private void setupComplementaryItems(List<Item> items) {
         Item prevItem = null;
         for (Item item : items) {
             if (prevItem != null && prevItem.getComplementaryItem() == null) {
@@ -161,8 +170,10 @@ public class SetupItemsDialog extends JDialog {
         final JPanel panel3 = new JPanel();
         panel3.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
         contentPane.add(panel3, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
-        listItems = new JList();
-        panel3.add(listItems, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_WANT_GROW, null, new Dimension(150, 50), null, 0, false));
+        final JScrollPane scrollPane1 = new JScrollPane();
+        panel3.add(scrollPane1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        tableItems = new JTable();
+        scrollPane1.setViewportView(tableItems);
         final JPanel panel4 = new JPanel();
         panel4.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
         contentPane.add(panel4, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, 1, null, null, null, 0, false));

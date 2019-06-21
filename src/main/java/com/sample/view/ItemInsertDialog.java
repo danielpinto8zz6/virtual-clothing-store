@@ -12,6 +12,7 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.List;
 
 public class ItemInsertDialog extends JDialog {
     private Item item = null;
@@ -22,11 +23,25 @@ public class ItemInsertDialog extends JDialog {
     private JTextField textFieldName;
     private JComboBox comboBoxGender;
     private JTextField textFieldPrice;
+    private JComboBox comboBoxComplementary;
+    private List<Item> items;
 
-    public ItemInsertDialog(Frame parent) {
+    public ItemInsertDialog(Frame parent, List<Item> items) {
         super(parent);
-
+        this.items = items;
+        this.item = new Item();
         this.initializeUI();
+    }
+
+    public ItemInsertDialog(Frame parent, List<Item> items, Item item) {
+        this(parent, items);
+
+        this.item = item;
+
+        textFieldName.setText(item.getName());
+        textFieldPrice.setText(String.valueOf(item.getPrice()));
+        comboBoxGender.setSelectedItem(item.getGender());
+        comboBoxComplementary.setSelectedItem(item.getComplementaryItem());
     }
 
     private void initializeUI() {
@@ -52,13 +67,18 @@ public class ItemInsertDialog extends JDialog {
         });
 
         // call onCancel() on ESCAPE
-        contentPane.registerKeyboardAction(e -> onCancel(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+        contentPane.registerKeyboardAction(e -> onCancel(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
+                JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+
+        comboBoxComplementary.setModel(new DefaultComboBoxModel(items.toArray()));
     }
 
     private void onOK() {
         String name = textFieldName.getText().trim();
-        Constants.Gender gender = (comboBoxGender.getSelectedItem().toString().trim() == "male") ? Constants.Gender.MALE : Constants.Gender.FEMALE;
+        Constants.Gender gender = (comboBoxGender.getSelectedItem().toString().trim() == "male") ? Constants.Gender.MALE
+                : Constants.Gender.FEMALE;
         String price = textFieldPrice.getText();
+        Item complementary = items.get(comboBoxComplementary.getSelectedIndex());
 
         if (name.isEmpty() || name == null) {
             JOptionPane.showMessageDialog(this, "Please insert a valid name.");
@@ -70,7 +90,23 @@ public class ItemInsertDialog extends JDialog {
             return;
         }
 
-        item = new Item(name, gender, Double.parseDouble(price));
+        if (complementary != null) {
+            // Remove pairing 
+            if (complementary.getComplementaryItem() != null) {
+                complementary.getComplementaryItem().setComplementaryItem(null);
+            }
+
+            item.setName(name);
+            item.setGender(gender);
+            item.setPrice(Double.parseDouble(price));
+            item.setComplementaryItem(complementary);
+            complementary.setComplementaryItem(item);
+        } else {
+            item.setName(name);
+            item.setGender(gender);
+            item.setPrice(Double.parseDouble(price));
+        }
+
 
         setVisible(false);
         dispose();
@@ -104,7 +140,7 @@ public class ItemInsertDialog extends JDialog {
         contentPane = new JPanel();
         contentPane.setLayout(new GridLayoutManager(2, 1, new Insets(10, 10, 10, 10), -1, -1));
         final JPanel panel1 = new JPanel();
-        panel1.setLayout(new GridLayoutManager(3, 2, new Insets(0, 0, 0, 0), -1, -1));
+        panel1.setLayout(new GridLayoutManager(4, 2, new Insets(0, 0, 0, 0), -1, -1));
         contentPane.add(panel1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         textFieldName = new JTextField();
         panel1.add(textFieldName, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
@@ -125,6 +161,11 @@ public class ItemInsertDialog extends JDialog {
         final JLabel label3 = new JLabel();
         label3.setText("Price");
         panel1.add(label3, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final JLabel label4 = new JLabel();
+        label4.setText("Complementary");
+        panel1.add(label4, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        comboBoxComplementary = new JComboBox();
+        panel1.add(comboBoxComplementary, new GridConstraints(3, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 1, false));
         final JPanel panel2 = new JPanel();
         panel2.setLayout(new GridLayoutManager(1, 2, new Insets(0, 0, 0, 0), -1, -1));
         contentPane.add(panel2, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, 1, null, null, null, 0, false));
